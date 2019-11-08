@@ -1,0 +1,14 @@
+*{
+    margin: 0px;
+    padding: 0px;
+
+}
+canvas{
+
+
+}
+audio{
+    position: absolute;
+    z-index: 1000;
+    top:0px;
+}
