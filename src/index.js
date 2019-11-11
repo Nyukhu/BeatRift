@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded",function(){
 
-
+    console.log("webpack is shit")
+    
     audio = document.querySelector("audio");
     let audioCtx = new AudioContext();
     analyser = audioCtx.createAnalyser();

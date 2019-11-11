@@ -1,1 +1,6 @@
-*.mp3
+src/audio/
+.idea/
+.DS_Store
+node_modules/
+dist/
+build/

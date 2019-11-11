@@ -1,0 +1,28 @@
+{
+  "name": "beatrift",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --config webpack.config.js",
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nyukhu/BeatRift.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nyukhu/BeatRift/issues"
+  },
+  "homepage": "https://github.com/Nyukhu/BeatRift#readme",
+  "dependencies": {
+    "copy-webpack-plugin": "^5.0.5",
+    "lodash": "^4.17.15",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.9.0"
+  }
+}
