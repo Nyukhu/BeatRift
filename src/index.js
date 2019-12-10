@@ -1,5 +1,8 @@
-document.addEventListener("DOMContentLoaded",function() {
+import PatternSelector from "./js/models/patternSelector";
 
+document.addEventListener("DOMContentLoaded",function() {
+    let patternSelector = new PatternSelector();
+    patternSelector.test();
     // --------------------------------- LAYOUT SETUP
     let canvas      = document.querySelector("canvas")
     let c           = canvas.getContext("2d")
