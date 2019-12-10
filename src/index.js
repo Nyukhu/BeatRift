@@ -3,11 +3,12 @@ import PatternSelector from "./js/models/patternSelector";
 document.addEventListener("DOMContentLoaded",function() {
     let patternSelector = new PatternSelector();
     patternSelector.test();
+
     // --------------------------------- LAYOUT SETUP
-    let canvas      = document.querySelector("canvas")
-    let c           = canvas.getContext("2d")
-    let body        = document.querySelector("body")
-    let rect        = body.getBoundingClientRect()
+    let canvas      = document.querySelector("canvas");
+    let c           = canvas.getContext("2d");
+    let body        = document.querySelector("body");
+    let rect        = body.getBoundingClientRect();
 
     canvas.width    = window.innerWidth;
     canvas.height   = window.innerHeight;
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded",function() {
     analyser.fftSize = 512;
     audio.play();
 
-    frequencyData   = new Uint8Array(analyser.frequencyBinCount)
+    const frequencyData   = new Uint8Array(analyser.frequencyBinCount);
 
     // --------------------------------- MOUSE SETUP
     let mouse = {
@@ -38,7 +39,7 @@ document.addEventListener("DOMContentLoaded",function() {
         mouse.x = event.pageX
         mouse.y = event.pageY
     })
-    
+
     // --------------------------------- PLAYER SETUP
     let player = {
         x           : w/2,
@@ -218,7 +219,7 @@ document.addEventListener("DOMContentLoaded",function() {
         // frequencyTab = calcAverage(frequencyData);
         let sum = 0
 
-        for ( let i  = 0; i < frequencyData.length ; i++ ) 
+        for ( let i  = 0; i < frequencyData.length ; i++ )
         {
             let f = Math.floor(frequencyData[i]) ;
             sum += f
@@ -263,7 +264,7 @@ document.addEventListener("DOMContentLoaded",function() {
             reseted         = true;
         }
 
-        for ( let i  = 0; i < frequencyTab.length ; i++ ) 
+        for ( let i  = 0; i < frequencyTab.length ; i++ )
         {
             let f = Math.floor(frequencyTab[i]) ;
 
@@ -283,7 +284,7 @@ document.addEventListener("DOMContentLoaded",function() {
         c.fillText( Math.floor(frequencyTab[6]), 300, 60 );
         c.fillText( Math.floor(frequencyTab[7]), 350, 60 );
 
-        for ( let i = 0; i < spawnedObj.length; i++ ) 
+        for ( let i = 0; i < spawnedObj.length; i++ )
         {
             c.beginPath();
 
@@ -346,7 +347,7 @@ document.addEventListener("DOMContentLoaded",function() {
         let maxIndex;
         let max         = 0;
 
-        for ( let i = 0; i < frequencyTab.length; i++ ) 
+        for ( let i = 0; i < frequencyTab.length; i++ )
         {
             if ( frequencyTab[i] > max )
             {
@@ -396,10 +397,10 @@ document.addEventListener("DOMContentLoaded",function() {
 
         let collided = false;
 
-        if ( obj.x < target.x + target.sizeX 
-            && obj.x + target.sizeX > target.x 
-            && obj.y < target.y + target.sizeY 
-            && obj.sizeY + obj.y > target.y ) 
+        if ( obj.x < target.x + target.sizeX
+            && obj.x + target.sizeX > target.x
+            && obj.y < target.y + target.sizeY
+            && obj.sizeY + obj.y > target.y )
         {
             collided = true;
         }

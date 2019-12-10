@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
-const webpack = require('webpack')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const path = require('path')
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
 function resolve (dir) {
   return path.join(__dirname, '', dir)
