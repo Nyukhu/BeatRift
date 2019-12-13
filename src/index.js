@@ -1,8 +1,10 @@
-import PatternSelector from "./js/models/patternSelector";
+import PatternManager from "./js/models/patternManager";
+import FrequencyAnalyser from "./js/models/frequencyAnalyser";
 
 document.addEventListener("DOMContentLoaded",function() {
-    let patternSelector = new PatternSelector();
-    patternSelector.test();
+    let patternManager = new PatternManager();
+    let frequencyAnalyser = new FrequencyAnalyser(20,0,200);
+    
 
     // --------------------------------- LAYOUT SETUP
     let canvas      = document.querySelector("canvas");
@@ -17,7 +19,7 @@ document.addEventListener("DOMContentLoaded",function() {
     let h           = canvas.height;
 
     // --------------------------------- AUDIO SETUP
-    let audio       = document.querySelector("audio");
+    let audio       = document.querySelector(".audio");
     let audioCtx    = new AudioContext();
     let analyser    = audioCtx.createAnalyser();
     let source      = audioCtx.createMediaElementSource(audio);
@@ -27,7 +29,7 @@ document.addEventListener("DOMContentLoaded",function() {
     analyser.fftSize = 512;
     audio.play();
 
-    const frequencyData   = new Uint8Array(analyser.frequencyBinCount);
+    const frequencyData = new Uint8Array(analyser.frequencyBinCount);
 
     // --------------------------------- MOUSE SETUP
     let mouse = {
@@ -135,6 +137,149 @@ document.addEventListener("DOMContentLoaded",function() {
     let beatDelay   = 0
     let alpha       = .1
     let wantedAlpha = 1
+
+    function drawBetter(){
+        delay ++
+
+        beatDelay++
+        alpha += (-alpha+wantedAlpha)/100
+
+        if(beatDelay % 100 == 0) {
+            wantedAlpha = 1-wantedAlpha
+        }
+
+        // ----- style
+        beatDelay > 300 && freq > 15000
+            ? (
+                c.fillStyle = "rgba(22, 22, 22, " + alpha + ")",
+                    freq = 0
+            )
+            : (
+                c.fillStyle = "rgba(22, 22, 22, " + alpha + ")"
+            )
+
+        for(let i in frequencyData) {
+            let f = frequencyData[i]
+
+            // ------ top
+            c.beginPath()
+            c.rect((w-(w/2))-i*15-7.5, h-(h/2), 13, -f)
+            c.fill()
+            c.beginPath()
+            c.rect((w-(w/2))+i*15+7.5, h-(h/2), 13, -f)
+            c.fill()
+
+            // ------ bottom
+            c.beginPath()
+            c.rect((w-(w/2))-i*15-7.5, h-(h/2), 13, f)
+            c.fill()
+            c.beginPath()
+            c.rect((w-(w/2))+i*15+7.5, h-(h/2), 13, f)
+            c.fill()
+
+            freq += f
+        }
+
+        // --------------------------------- PLAYER RENDER
+
+        // ----- behavior
+        if(!canDash) {
+            dashDelay++
+        }
+        if(dashDelay >= 100) {
+            canDash     = true
+            dashDelay   = 0
+        }
+
+        isMovingLeft    ? player.x-=player.sx : ""
+        isMovingRight   ? player.x+=player.sx : ""
+        isMovingUp      ? player.y-=player.sy : ""
+        isMovingDown    ? player.y+=player.sy : ""
+
+        // ----- style
+        c.beginPath()
+        c.fillStyle     = "magenta"
+        c.rect(player.x, player.y, player.sizeX, player.sizeY)
+        c.fill()
+
+        if(player.y > h) {
+            player.y=0
+        }
+        if(player.y < 0) {
+            player.y=h
+        }
+        if(player.x > w) {
+            player.x=0
+        }
+        if(player.x < 0) {
+            player.x=w
+        }
+
+
+        analyser.getByteFrequencyData(frequencyData);
+        if (1)
+        {
+            trailDelay  = 0;
+            c.fillStyle = 'rgba(33,33,33,.3)';
+            c.fillRect(0,0,canvas.width,canvas.height);
+        }
+        
+        if(delay > 2){
+            frequencyAnalyser.updateAnalysis(frequencyData);
+            let test = false
+            frequencyTab = frequencyAnalyser.getVariations();
+            for (let i = 0; i < frequencyTab.length; i++) {
+                if (frequencyTab[i] > 200) {
+                    console.log(i)
+                    test = true
+                }
+            }
+            if (test) {
+                patternManager.generate(h, frequencyAnalyser.getHighestFrequency());
+                test = false
+
+            }
+            delay = 0
+        }
+        patternManager.update()
+
+        spawnedObj = patternManager.getObjects()
+        let nbOfObjects = patternManager.getObjects().length
+
+        for (let i = 0; i < nbOfObjects; i++) {
+            c.beginPath();
+
+            c.rect(spawnedObj[i].x, spawnedObj[i].y, 5, 5);
+            c.fillStyle = "#FFFFFF";
+            c.fill();
+
+            
+        }
+        /*
+        c.fillStyle = "#000000";
+        for ( let i  = 0; i < frequencyTab.length ; i++ )
+        {
+            let f = Math.floor(frequencyTab[i]) ;
+
+            c.beginPath();
+            c.rect(i*11, 100, 10, f);
+            c.fill();
+        }
+
+        c.font      = "12px Arial";
+        c.fillStyle = "black";
+        c.fillText( Math.floor(frequencyTab[0]), 10, 60 );
+        c.fillText( Math.floor(frequencyTab[1]), 50, 60 );
+        c.fillText( Math.floor(frequencyTab[2]), 100, 60 );
+        c.fillText( Math.floor(frequencyTab[3]), 150, 60 );
+        c.fillText( Math.floor(frequencyTab[4]), 200, 60 );
+        c.fillText( Math.floor(frequencyTab[5]), 250, 60 );
+        c.fillText( Math.floor(frequencyTab[6]), 300, 60 );
+        c.fillText( Math.floor(frequencyTab[7]), 350, 60 );
+        
+        */
+        window.requestAnimationFrame(drawBetter);
+    }
 
     function draw(){
 
@@ -309,7 +454,7 @@ document.addEventListener("DOMContentLoaded",function() {
             c.fill();
         }
 
-        if (!player.hit)
+        if (1)//!player.hit
         {
             window.requestAnimationFrame(draw);
         }
@@ -408,7 +553,7 @@ document.addEventListener("DOMContentLoaded",function() {
         return collided;
     }
 
-    window.requestAnimationFrame(draw);
+    window.requestAnimationFrame(drawBetter);
 });
 
 

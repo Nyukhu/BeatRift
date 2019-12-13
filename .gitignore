@@ -4,3 +4,4 @@ src/audio/
 node_modules/
 dist/
 build/
+.mp3
